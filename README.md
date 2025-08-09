@@ -5,3 +5,6 @@ The core idea behind this project is to create an AI agent that can act as an in
 This also a project to learn how AI can be integrated with applications and other tools and also to solidify my understanding of how to use LLMs effectively.
 
 ---
+
+## Diagram
+![alt text](image.png)
