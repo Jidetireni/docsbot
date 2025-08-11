@@ -11,10 +11,9 @@ func loadPDFFile(path string) (io.ReaderAt, int64, error) {
 		return nil, 0, err
 	}
 
-	defer file.Close()
-
 	info, err := file.Stat()
 	if err != nil {
+		file.Close()
 		return nil, 0, err
 	}
 

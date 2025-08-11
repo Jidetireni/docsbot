@@ -11,7 +11,7 @@ import (
 type DocumentSplitterConfig struct {
 	PdfPaths     []string
 	TextPaths    []string
-	ChunckSize   int
+	ChunkSize    int
 	ChunkOverlap int
 }
 
@@ -22,8 +22,9 @@ func (l *Loader) SplitDocuments(ctx context.Context, config *DocumentSplitterCon
 		if err != nil {
 			return nil, err
 		}
+		defer reader.(*os.File).Close()
 
-		pdfDocs, err := l.PDFLoader(ctx, reader, size)
+		pdfDocs, err := l.PDFLoader(ctx, reader, size, nil)
 		if err != nil {
 			return nil, err
 		}
@@ -36,6 +37,8 @@ func (l *Loader) SplitDocuments(ctx context.Context, config *DocumentSplitterCon
 		if err != nil {
 			return nil, err
 		}
+		defer reader.Close()
+
 		textDocs, err := l.TextLoader(ctx, reader)
 		if err != nil {
 			return nil, err
@@ -45,7 +48,7 @@ func (l *Loader) SplitDocuments(ctx context.Context, config *DocumentSplitterCon
 	}
 
 	splitter := textsplitter.NewRecursiveCharacter(
-		textsplitter.WithChunkSize(config.ChunckSize),
+		textsplitter.WithChunkSize(config.ChunkSize),
 		textsplitter.WithChunkOverlap(config.ChunkOverlap),
 	)
 
